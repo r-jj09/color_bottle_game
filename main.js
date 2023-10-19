@@ -1,13 +1,42 @@
-const form = document.getElementById("form");
-const submitter = document.querySelector("button[value=save]");
-const formData = new FormData();
+// $("body").on("click", "button", (event) => {
+// 	let form = $("form");
+// 	let message = $(".message");
+// 	const formData = new FormData(form.get(0));
+// 	formData.append("message", message.text());
+// 	for (const [key, value] of formData.entries()) {
+// 		console.log(`${key} ${value}`);
+// 	}
+// });
 
-var firstname = formData.get("firstname");
-var lastname = formData.get("lastname");
-var country = formData.get("country");
-var address = formData.get("address");
-var zipcode = formData.get("zipcode");
-var email = formData.get("email");
-var phone = formData.get("phone");
+class BaseBottle {
+	numerOfColors = 4;
+	baseColors = [
+		"white",
+		"red",
+		"blue",
+		"purple",
+		"navy",
+		"maroon",
+		"green",
+		"yellow",
+	];
+	colors = [];
+	constructor() {
+		// itt kellene feltölteni a colors paramétert.
+		for (let i = 0; i < this.numerOfColors; i++) {
+			const randomIndex = Math.floor(Math.random() * this.baseColors.length);
+			this.colors.push(this.baseColors[randomIndex]);
+		}
+	}
 
-// console.log(firstname);
+	showBottle() {
+		// itt jelenítsd meg-
+		var bottle = document.createElement("div");
+		bottle.classList.add("bottle");
+		var box = document.createElement("div");
+		box.classList.add("box");
+		bottle.append(box);
+	}
+}
+const bottle = new BaseBottle();
+console.log(bottle.colors);
