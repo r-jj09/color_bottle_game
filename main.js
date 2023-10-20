@@ -1,16 +1,16 @@
 class BaseBottle {
 	numerOfColors = 4;
 	baseColors = [
-		"white",
 		"red",
-		"blue",
-		"purple",
-		"navy",
-		"maroon",
 		"green",
+		"blue",
 		"yellow",
-		"teal",
 		"aqua",
+		"teal",
+		"navy",
+		"purple",
+		"maroon",
+		"hotpink",
 	];
 	colors = [];
 	constructor() {
@@ -37,7 +37,7 @@ class Playground {
 	rowsCount;
 	colsCount;
 	field = $(
-		"<div style='width: 20px; height: 80px;border: 1px solid black; display: inline-flex; flex-direction: column; position: relative;'></div>"
+		"<div style='width: 60px; height: 120px;border: 1px solid black; display: inline-flex; flex-direction: column; position: relative;'></div>"
 	);
 
 	constructor(rowsCount = 10, colsCount = 10) {
@@ -62,14 +62,16 @@ class Playground {
 
 class Game {
 	playground;
+	basebottle;
 
-	constructor(playground) {
+	constructor(playground, basebottle) {
 		this.playground = playground;
+		this.basebottle = basebottle;
 		this.startGame();
 	}
 
 	startGame() {
-		//
+		// this.playground.clone.append(this.basebottle.bottle);
 	}
 }
 
