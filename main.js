@@ -71,7 +71,7 @@ class Game {
 	}
 
 	startGame() {
-		// this.playground.clone.append(this.basebottle.bottle);
+		//
 	}
 }
 
