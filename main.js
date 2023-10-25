@@ -1,17 +1,6 @@
 class BaseBottle {
 	numerOfColors = 4;
-	baseColors = [
-		"red",
-		"green",
-		"blue",
-		"yellow",
-		"aqua",
-		"teal",
-		"navy",
-		"purple",
-		"maroon",
-		"hotpink",
-	];
+	baseColors = ["aqua", "teal", "navy", "purple", "maroon", "hotpink"];
 	colors = [];
 	constructor() {
 		for (let i = 0; i < this.numerOfColors; i++) {
@@ -37,9 +26,11 @@ class Playground {
 	rowsCount;
 	colsCount;
 	field = $(
-		"<div style='width: 60px; height: 120px;border: 1px solid black; display: inline-flex; flex-direction: column; position: relative;'></div>"
+		"<div class='field' style='width: 60px; height: 120px;border: 1px solid teal; display: inline-flex; flex-direction: column; position: relative;'></div>"
 	);
-
+	// let fields = $("body").find(".field")
+	// fields.map((index, field) => {
+	// })
 	constructor(rowsCount = 10, colsCount = 10) {
 		this.rowsCount = rowsCount;
 		this.colsCount = colsCount;
@@ -51,9 +42,9 @@ class Playground {
 			for (let j = 0; j < this.colsCount; j++) {
 				let id = i * this.colsCount + j;
 				let clone = this.field.clone();
-
 				clone.attr("id", id);
 				$("body").append(clone);
+				clone.append($(".bottle"));
 			}
 			$("body").append("<br>");
 		}
@@ -70,9 +61,8 @@ class Game {
 		this.startGame();
 	}
 
-	startGame() {
-		//
-	}
+	startGame() {}
 }
 
-game = new Game(new Playground(2, 5), new BaseBottle());
+bottle = new BaseBottle();
+game = new Game(bottle, new Playground(2, 3));
