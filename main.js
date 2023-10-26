@@ -1,5 +1,5 @@
 class BaseBottle {
-	numerOfColors = 4;
+	numerOfColors = 3;
 	baseColors = ["aqua", "teal", "navy", "purple", "maroon", "hotpink"];
 	colors = [];
 	constructor() {
@@ -8,30 +8,38 @@ class BaseBottle {
 			this.colors.push(this.baseColors[randomIndex]);
 		}
 		this.showBottle();
+		this.pourOut();
+		this.pourIn();
 	}
 
 	showBottle() {
 		var bottle = document.createElement("div");
 		bottle.classList.add("bottle");
-		for (let i = 0; i < this.numerOfColors; i++) {
+		for (let i = 0; i < this.numerOfColors + 1; i++) {
 			var box = document.createElement("div");
 			box.classList.add("box");
 			box.style.backgroundColor = this.colors[i];
 			bottle.append(box);
-			$("body").append(bottle);
 		}
+		return bottle;
+	}
+
+	pourOut() {
+		var lastColor = this.colors.pop();
+		return lastColor;
+	}
+
+	pourIn(color) {
+		this.colors.push();
+		return;
 	}
 }
 class Playground {
 	rowsCount;
 	colsCount;
-	field = $(
-		"<div class='field' style='width: 60px; height: 120px;border: 1px solid teal; display: inline-flex; flex-direction: column; position: relative;'></div>"
-	);
-	// let fields = $("body").find(".field")
-	// fields.map((index, field) => {
-	// })
-	constructor(rowsCount = 10, colsCount = 10) {
+	field = $("<div class='field'></div>");
+
+	constructor(rowsCount, colsCount) {
 		this.rowsCount = rowsCount;
 		this.colsCount = colsCount;
 		this.showPlayground();
@@ -46,23 +54,40 @@ class Playground {
 				$("body").append(clone);
 				clone.append($(".bottle"));
 			}
-			$("body").append("<br>");
 		}
+
+		let fields = $("body").find(".field");
+		fields.map((index, field) => {
+			let bottle = new BaseBottle();
+			field.append(bottle.showBottle());
+		});
 	}
 }
 
 class Game {
 	playground;
-	basebottle;
 
-	constructor(playground, basebottle) {
+	constructor(playground) {
 		this.playground = playground;
-		this.basebottle = basebottle;
 		this.startGame();
 	}
 
 	startGame() {}
 }
+$(document).ready(function () {
+	let selected = false;
 
-bottle = new BaseBottle();
-game = new Game(bottle, new Playground(2, 3));
+	$(".field").click(function () {
+		if (selected) {
+			$(this).css("transform", "none");
+			$(this).removeClass("selected");
+		} else {
+			$(this).css("transform", "translateY(-2.1rem)");
+			$(this).addClass("selected");
+		}
+		selected = !selected;
+	});
+});
+game = new Game(new Playground(2, 3));
+let bottle = new BaseBottle();
+console.log(bottle.pourOut());
