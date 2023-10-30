@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Color Bottle Game</title>
     <link rel="stylesheet" href="style.css">
-
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧩</text></svg>">
+    <!-- Ikon csere valami puzzle svg-re vagy vizes palack -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
@@ -14,23 +16,28 @@
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js"
         integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 
 <body>
     <h1>Color Bottle Puzzle Game</h1>
     <div class="rules">
         <h5>Rules</h5>
+        <span>This game is NOT mobile compatible</span>
         <ul>
             <li>Your goal is to fill all the bottles with the same color</li>
             <li>You can only pour the same colors into each other</li>
             <li>Left click on the first bottle you wanna pour from, and right click on the second one you wanna pour
                 into.</li>
-            <li>Do the same if you want to unselect it</li>
-            <li>Once all the colors are in their own bottle you win</li>
-
+            <li>Do the same if you want to unselect them</li>
+            <li>Once all the colors are in their own bottle you win the game</li>
         </ul>
     </div>
     <script src="main.js"></script>
+    <div class="restart-button">
+        <button onClick="window.location.reload();" class="btn btn-danger"><i class="bi bi-arrow-clockwise"></i>
+            Restart</button>
+    </div>
 </body>
 
 </html>

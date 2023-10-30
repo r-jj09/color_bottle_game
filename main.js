@@ -25,14 +25,15 @@ class BaseBottle {
 		});
 	}
 
-	pourOut() {
-		var lastColor = this.colors.pop();
+	pourOut(colorElems) {
+		let lastColor = colorElems.pop();
+		console.log(lastColor);
 		return lastColor;
 	}
 
-	pourIn(colorElem) {
-		this.colors.push(colorElem);
-		return;
+	pourIn(colorElem, lastColor) {
+		colorElem.push(lastColor);
+		return colorElem;
 	}
 }
 class Playground {
@@ -56,7 +57,6 @@ class Playground {
 				clone.attr("id", id);
 				this.content.append(clone);
 				this.container.append(this.content);
-				clone.append($(".bottle"));
 			}
 		}
 
@@ -71,6 +71,7 @@ class Playground {
 class Game {
 	playground;
 	selectedField;
+	selected2ndField;
 
 	constructor(playground) {
 		this.playground = playground;
@@ -82,9 +83,6 @@ class Game {
 			event.preventDefault();
 			return false;
 		});
-
-		// Kellene egy jobbgombos esemény, ahol megkapjuk, hogy melyi flaskába öntsünk.
-		// A BaseBottle-t kellen úgy módosítani, hogy a colors tömbbe a színekkel feltöltött div elemek kerüljenek.
 
 		$(".field").on("mousedown", (event) => {
 			if (event.which === 1) {
@@ -99,19 +97,21 @@ class Game {
 				} else {
 					elem.addClass("selected");
 					this.selectedField = elem;
+					let bottle = new BaseBottle();
+					bottle.pourOut(bottle.colorElems);
 				}
 			} else if (event.which === 3) {
 				let elem = $(event.currentTarget);
 
-				if (this.selectedField) {
-					this.selectedField.removeClass("selected");
+				if (this.selected2ndField) {
+					this.selected2ndField.removeClass("selected");
 				}
 
-				if (this.selectedField && this.selectedField.is(elem)) {
-					this.selectedField = null;
+				if (this.selected2ndField && this.selected2ndField.is(elem)) {
+					this.selected2ndField = null;
 				} else {
 					elem.addClass("selected");
-					this.selectedField = elem;
+					this.selected2ndField = elem;
 				}
 			}
 		});
@@ -123,3 +123,10 @@ class Game {
 
 game = new Game(new Playground(2, 3));
 bottle = new BaseBottle();
+
+//! TODO
+// Kiönt és beönt megjavítása
+//* Üres Bottle létrehozása
+//* Győzelem lekezelése
+//? Újraindítás gomb (gombra rá egy reload és puff? xd)
+//? Szín generálás limit?
