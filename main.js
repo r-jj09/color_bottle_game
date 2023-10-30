@@ -1,27 +1,32 @@
 class BaseBottle {
-	numerOfColors = 3;
+	numerOfColors = 4;
 	baseColors = ["aqua", "teal", "navy", "purple", "maroon", "hotpink"];
-	colors = [];
+	colorElems = [];
+
 	constructor() {
+		let colors = [];
+
 		for (let i = 0; i < this.numerOfColors; i++) {
 			const randomIndex = Math.floor(Math.random() * this.baseColors.length);
-			this.colors.push(this.baseColors[randomIndex]);
+			colors.push(this.baseColors[randomIndex]);
 		}
-		this.showBottle();
-		this.pourOut();
-		this.pourIn();
-	}
 
-	showBottle() {
-		var bottle = document.createElement("div");
+		let bottle = document.createElement("div");
 		bottle.classList.add("bottle");
-		for (let i = 0; i < this.numerOfColors + 1; i++) {
+
+		colors.map((color) => {
 			var box = document.createElement("div");
 			box.classList.add("box");
-			box.style.backgroundColor = this.colors[i];
+			this.colorElems.push(box);
+			box.style.backgroundColor = color;
 			bottle.append(box);
-		}
-		return bottle;
+		});
+	}
+
+	showBottle(field) {
+		this.colorElems.map((colorElem) => {
+			field.append(colorElem);
+		});
 	}
 
 	pourOut() {
@@ -29,8 +34,8 @@ class BaseBottle {
 		return lastColor;
 	}
 
-	pourIn(color) {
-		this.colors.push();
+	pourIn(colorElem) {
+		this.colors.push(colorElem);
 		return;
 	}
 }
@@ -38,6 +43,7 @@ class Playground {
 	rowsCount;
 	colsCount;
 	field = $("<div class='field'></div>");
+	container = $("body");
 
 	constructor(rowsCount, colsCount) {
 		this.rowsCount = rowsCount;
@@ -51,7 +57,7 @@ class Playground {
 				let id = i * this.colsCount + j;
 				let clone = this.field.clone();
 				clone.attr("id", id);
-				$("body").append(clone);
+				this.container.append(clone);
 				clone.append($(".bottle"));
 			}
 		}
@@ -59,35 +65,57 @@ class Playground {
 		let fields = $("body").find(".field");
 		fields.map((index, field) => {
 			let bottle = new BaseBottle();
-			field.append(bottle.showBottle());
+			bottle.showBottle(field);
 		});
 	}
 }
 
 class Game {
 	playground;
+	selectedField;
 
 	constructor(playground) {
 		this.playground = playground;
 		this.startGame();
+
+		// Events
+
+		$(document).on("contextmenu", (event) => {
+			event.preventDefault();
+			return false;
+		});
+
+		this.playground.container.on("click", ".field", (event) => {
+			let elem = $(event.currentTarget);
+
+			if (this.selectedField) {
+				this.selectedField.removeClass("selected");
+			}
+
+			if (this.selectedField && this.selectedField.is(elem)) {
+				this.selectedField = null;
+			} else {
+				elem.addClass("selected");
+				this.selectedField = elem;
+			}
+		});
+		// Kellene egy jobbgombos esemény, ahol megkapjuk, hogy melyi flaskába öntsünk.
+		// A BaseBottle-t kellen úgy módosítani, hogy a colors tömbbe a színekkel feltöltött div elemek kerüljenek.
+
+		$(".field").on("mousedown", (event) => {
+			let elem = $(event.currentTarget);
+
+			if (elem.hasClass("selected")) {
+				elem.removeClass("selected");
+			} else {
+				elem.addClass("selected");
+			}
+		});
 	}
-
-	startGame() {}
+	startGame() {
+		//wut
+	}
 }
-$(document).ready(function () {
-	let selected = false;
 
-	$(".field").click(function () {
-		if (selected) {
-			$(this).css("transform", "none");
-			$(this).removeClass("selected");
-		} else {
-			$(this).css("transform", "translateY(-2.1rem)");
-			$(this).addClass("selected");
-		}
-		selected = !selected;
-	});
-});
 game = new Game(new Playground(2, 3));
-let bottle = new BaseBottle();
-console.log(bottle.pourOut());
+bottle = new BaseBottle();
