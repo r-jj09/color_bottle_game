@@ -1,5 +1,5 @@
 class BaseBottle {
-	numerOfColors = 4;
+	numerOfColors = 3;
 	baseColors = ["aqua", "teal", "navy", "purple", "maroon", "hotpink"];
 	colorElems = [];
 
@@ -11,15 +11,11 @@ class BaseBottle {
 			colors.push(this.baseColors[randomIndex]);
 		}
 
-		let bottle = document.createElement("div");
-		bottle.classList.add("bottle");
-
 		colors.map((color) => {
 			var box = document.createElement("div");
 			box.classList.add("box");
 			this.colorElems.push(box);
 			box.style.backgroundColor = color;
-			bottle.append(box);
 		});
 	}
 
@@ -44,6 +40,7 @@ class Playground {
 	colsCount;
 	field = $("<div class='field'></div>");
 	container = $("body");
+	content = $("<div class='content'></div>");
 
 	constructor(rowsCount, colsCount) {
 		this.rowsCount = rowsCount;
@@ -57,7 +54,8 @@ class Playground {
 				let id = i * this.colsCount + j;
 				let clone = this.field.clone();
 				clone.attr("id", id);
-				this.container.append(clone);
+				this.content.append(clone);
+				this.container.append(this.content);
 				clone.append($(".bottle"));
 			}
 		}
@@ -85,35 +83,41 @@ class Game {
 			return false;
 		});
 
-		this.playground.container.on("click", ".field", (event) => {
-			let elem = $(event.currentTarget);
-
-			if (this.selectedField) {
-				this.selectedField.removeClass("selected");
-			}
-
-			if (this.selectedField && this.selectedField.is(elem)) {
-				this.selectedField = null;
-			} else {
-				elem.addClass("selected");
-				this.selectedField = elem;
-			}
-		});
 		// Kellene egy jobbgombos esemény, ahol megkapjuk, hogy melyi flaskába öntsünk.
 		// A BaseBottle-t kellen úgy módosítani, hogy a colors tömbbe a színekkel feltöltött div elemek kerüljenek.
 
 		$(".field").on("mousedown", (event) => {
-			let elem = $(event.currentTarget);
+			if (event.which === 1) {
+				let elem = $(event.currentTarget);
 
-			if (elem.hasClass("selected")) {
-				elem.removeClass("selected");
-			} else {
-				elem.addClass("selected");
+				if (this.selectedField) {
+					this.selectedField.removeClass("selected");
+				}
+
+				if (this.selectedField && this.selectedField.is(elem)) {
+					this.selectedField = null;
+				} else {
+					elem.addClass("selected");
+					this.selectedField = elem;
+				}
+			} else if (event.which === 3) {
+				let elem = $(event.currentTarget);
+
+				if (this.selectedField) {
+					this.selectedField.removeClass("selected");
+				}
+
+				if (this.selectedField && this.selectedField.is(elem)) {
+					this.selectedField = null;
+				} else {
+					elem.addClass("selected");
+					this.selectedField = elem;
+				}
 			}
 		});
 	}
 	startGame() {
-		//wut
+		//
 	}
 }
 
