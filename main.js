@@ -18,22 +18,22 @@ class BaseBottle {
 			box.style.backgroundColor = color;
 		});
 	}
+	pourOut(elem) {
+		console.log(this.colorElems);
+		let lastColor = this.colorElems.pop();
+		console.log(lastColor);
+		console.log(this.colorElems);
+		return lastColor;
+	}
+
+	pourIn(lastColor) {
+		this.colorElems.push(lastColor);
+	}
 
 	showBottle(field) {
 		this.colorElems.map((colorElem) => {
 			field.append(colorElem);
 		});
-	}
-
-	pourOut(colorElems) {
-		let lastColor = colorElems.pop();
-		console.log(lastColor);
-		return lastColor;
-	}
-
-	pourIn(colorElem, lastColor) {
-		colorElem.push(lastColor);
-		return colorElem;
 	}
 }
 class Playground {
@@ -50,6 +50,7 @@ class Playground {
 	}
 
 	showPlayground() {
+		let lastFieldId;
 		for (let i = 0; i < this.rowsCount; i++) {
 			for (let j = 0; j < this.colsCount; j++) {
 				let id = i * this.colsCount + j;
@@ -57,14 +58,20 @@ class Playground {
 				clone.attr("id", id);
 				this.content.append(clone);
 				this.container.append(this.content);
+
+				lastFieldId = id;
 			}
 		}
-
 		let fields = $("body").find(".field");
 		fields.map((index, field) => {
 			let bottle = new BaseBottle();
 			bottle.showBottle(field);
 		});
+		let id = lastFieldId + 1;
+		let clone = this.field.clone();
+		clone.attr("id", id);
+		this.content.append(clone);
+		this.container.append(this.content);
 	}
 }
 
@@ -98,7 +105,7 @@ class Game {
 					elem.addClass("selected");
 					this.selectedField = elem;
 					let bottle = new BaseBottle();
-					bottle.pourOut(bottle.colorElems);
+					bottle.pourOut(elem);
 				}
 			} else if (event.which === 3) {
 				let elem = $(event.currentTarget);
@@ -124,9 +131,9 @@ class Game {
 game = new Game(new Playground(2, 3));
 bottle = new BaseBottle();
 
-//! TODO
-// Kiönt és beönt megjavítása
+//TODO
 //* Üres Bottle létrehozása
-//* Győzelem lekezelése
-//? Újraindítás gomb (gombra rá egy reload és puff? xd)
-//? Szín generálás limit?
+//? Újraindítás gomb
+//! Kiönt és beönt megjavítása
+//! Szín generálás limit?
+//! Győzelem lekezelése
