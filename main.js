@@ -2,6 +2,7 @@ class BaseBottle {
 	numerOfColors = 3;
 	baseColors = ["aqua", "teal", "navy", "purple", "maroon", "hotpink"];
 	colorElems = [];
+	id;
 
 	constructor() {
 		let colors = [];
@@ -14,20 +15,21 @@ class BaseBottle {
 		colors.map((color) => {
 			var box = document.createElement("div");
 			box.classList.add("box");
+			box.setAttribute("color", color);
 			this.colorElems.push(box);
 			box.style.backgroundColor = color;
 		});
 	}
-	pourOut(elem) {
+	pourOut() {
 		console.log(this.colorElems);
-		let lastColor = this.colorElems.pop();
+		var lastColor = this.colorElems.pop();
 		console.log(lastColor);
-		console.log(this.colorElems);
 		return lastColor;
 	}
 
 	pourIn(lastColor) {
 		this.colorElems.push(lastColor);
+		console.log(this.colorElems);
 	}
 
 	showBottle(field) {
@@ -42,6 +44,7 @@ class Playground {
 	field = $("<div class='field'></div>");
 	container = $("body");
 	content = $("<div class='content'></div>");
+	bottles = [];
 
 	constructor(rowsCount, colsCount) {
 		this.rowsCount = rowsCount;
@@ -58,20 +61,22 @@ class Playground {
 				clone.attr("id", id);
 				this.content.append(clone);
 				this.container.append(this.content);
-
 				lastFieldId = id;
 			}
 		}
-		let fields = $("body").find(".field");
-		fields.map((index, field) => {
-			let bottle = new BaseBottle();
-			bottle.showBottle(field);
-		});
 		let id = lastFieldId + 1;
 		let clone = this.field.clone();
 		clone.attr("id", id);
 		this.content.append(clone);
 		this.container.append(this.content);
+		let fields = $("body").find(".field");
+		fields.map((index, field) => {
+			let bottle = new BaseBottle();
+			let id = $(field).attr("id");
+			bottle.id = id;
+			this.bottles[id] = bottle;
+			bottle.showBottle(field);
+		});
 	}
 }
 
@@ -79,6 +84,7 @@ class Game {
 	playground;
 	selectedField;
 	selected2ndField;
+	selectedBottle;
 
 	constructor(playground) {
 		this.playground = playground;
@@ -93,6 +99,7 @@ class Game {
 
 		$(".field").on("mousedown", (event) => {
 			if (event.which === 1) {
+				//Bal katt
 				let elem = $(event.currentTarget);
 
 				if (this.selectedField) {
@@ -104,10 +111,11 @@ class Game {
 				} else {
 					elem.addClass("selected");
 					this.selectedField = elem;
-					let bottle = new BaseBottle();
-					bottle.pourOut(elem);
+					let currentId = elem.attr("id");
+					this.selectedBottle = playground.bottles[currentId];
 				}
 			} else if (event.which === 3) {
+				//Jobb katt
 				let elem = $(event.currentTarget);
 
 				if (this.selected2ndField) {
@@ -119,21 +127,26 @@ class Game {
 				} else {
 					elem.addClass("selected");
 					this.selected2ndField = elem;
+					let currentId = elem.attr("id");
+					let selectedBottle2 = playground.bottles[currentId];
+					let color = this.selectedBottle.pourOut();
+					selectedBottle2.pourIn(color);
+					selectedBottle2.showBottle(
+						$("body").find("[id=" + selectedBottle2.id + "]")
+					);
+					this.selectedField.removeClass("selected");
+					this.selected2ndField.removeClass("selected");
 				}
 			}
 		});
 	}
 	startGame() {
-		//
+		console.log();
 	}
+	// color = this.playground.bottles[id].pourOut();
+	// this.playground.bottles[id2].pourIn(color);
+	// Ide kellene egy öntés metódus
 }
 
 game = new Game(new Playground(2, 3));
 bottle = new BaseBottle();
-
-//TODO
-//* Üres Bottle létrehozása
-//? Újraindítás gomb
-//! Kiönt és beönt megjavítása
-//! Szín generálás limit?
-//! Győzelem lekezelése
