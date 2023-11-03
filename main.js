@@ -6,7 +6,7 @@ class BaseBottle {
 
 	constructor() {
 		let colors = [];
-
+		this.colorElems.length = 3;
 		for (let i = 0; i < this.numerOfColors; i++) {
 			const randomIndex = Math.floor(Math.random() * this.baseColors.length);
 			colors.push(this.baseColors[randomIndex]);
@@ -21,15 +21,12 @@ class BaseBottle {
 		});
 	}
 	pourOut() {
-		console.log(this.colorElems);
 		var lastColor = this.colorElems.pop();
-		console.log(lastColor);
 		return lastColor;
 	}
 
 	pourIn(lastColor) {
 		this.colorElems.push(lastColor);
-		console.log(this.colorElems);
 	}
 
 	showBottle(field) {
@@ -90,6 +87,9 @@ class Game {
 		this.playground = playground;
 		this.startGame();
 
+		var currentColor;
+		var currentColor2;
+
 		// Events
 
 		$(document).on("contextmenu", (event) => {
@@ -113,11 +113,15 @@ class Game {
 					this.selectedField = elem;
 					let currentId = elem.attr("id");
 					this.selectedBottle = playground.bottles[currentId];
+
+					currentColor =
+						this.selectedBottle.colorElems[
+							this.selectedBottle.colorElems.length - 1
+						].getAttribute("color");
 				}
 			} else if (event.which === 3) {
 				//Jobb katt
 				let elem = $(event.currentTarget);
-
 				if (this.selected2ndField) {
 					this.selected2ndField.removeClass("selected");
 				}
@@ -129,11 +133,26 @@ class Game {
 					this.selected2ndField = elem;
 					let currentId = elem.attr("id");
 					let selectedBottle2 = playground.bottles[currentId];
-					let color = this.selectedBottle.pourOut();
-					selectedBottle2.pourIn(color);
-					selectedBottle2.showBottle(
-						$("body").find("[id=" + selectedBottle2.id + "]")
-					);
+
+					currentColor2 =
+						selectedBottle2.colorElems[
+							selectedBottle2.colorElems.length - 1
+						].getAttribute("color");
+					if (currentColor === currentColor2 || currentColor2 === null) {
+						let color = this.selectedBottle.pourOut();
+						selectedBottle2.pourIn(color);
+						selectedBottle2.showBottle(
+							$("body").find("[id=" + selectedBottle2.id + "]")
+						);
+					} else {
+						this.selectedField.addClass("shake");
+						this.selected2ndField.addClass("shake");
+
+						setTimeout(() => {
+							this.selectedField.removeClass("shake");
+							this.selected2ndField.removeClass("shake");
+						}, 1000);
+					}
 					this.selectedField.removeClass("selected");
 					this.selected2ndField.removeClass("selected");
 				}
@@ -143,9 +162,6 @@ class Game {
 	startGame() {
 		console.log();
 	}
-	// color = this.playground.bottles[id].pourOut();
-	// this.playground.bottles[id2].pourIn(color);
-	// Ide kellene egy öntés metódus
 }
 
 game = new Game(new Playground(2, 3));
