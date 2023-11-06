@@ -6,7 +6,6 @@ class BaseBottle {
 
 	constructor() {
 		let colors = [];
-		this.colorElems.length = 3;
 		for (let i = 0; i < this.numerOfColors; i++) {
 			const randomIndex = Math.floor(Math.random() * this.baseColors.length);
 			colors.push(this.baseColors[randomIndex]);
@@ -21,12 +20,30 @@ class BaseBottle {
 		});
 	}
 	pourOut() {
+		let lastColors = [];
 		var lastColor = this.colorElems.pop();
-		return lastColor;
+		lastColors.push(lastColor);
+		var colorAttr = $(lastColor).attr("color");
+		this.colorElems.map(() => {
+			if (
+				this.colorElems[this.colorElems.length - 1].getAttribute("color") ===
+				colorAttr
+			) {
+				lastColor = this.colorElems.pop();
+				lastColors.push(lastColor);
+			}
+		});
+		return lastColors;
 	}
 
-	pourIn(lastColor) {
-		this.colorElems.push(lastColor);
+	pourIn(lastColors) {
+		for (let i = 0; i < lastColors.length; i++) {
+			if (this.colorElems.length <= 4) {
+				this.colorElems.push(lastColors[i]);
+			} else {
+				alert("The bottle is already full!");
+			}
+		}
 	}
 
 	showBottle(field) {
@@ -114,10 +131,11 @@ class Game {
 					let currentId = elem.attr("id");
 					this.selectedBottle = playground.bottles[currentId];
 
-					currentColor =
+					currentColor = $(
 						this.selectedBottle.colorElems[
 							this.selectedBottle.colorElems.length - 1
-						].getAttribute("color");
+						]
+					).attr("color");
 				}
 			} else if (event.which === 3) {
 				//Jobb katt
@@ -133,12 +151,14 @@ class Game {
 					this.selected2ndField = elem;
 					let currentId = elem.attr("id");
 					let selectedBottle2 = playground.bottles[currentId];
-
-					currentColor2 =
-						selectedBottle2.colorElems[
-							selectedBottle2.colorElems.length - 1
-						].getAttribute("color");
-					if (currentColor === currentColor2 || currentColor2 === null) {
+					currentColor2 = $(
+						selectedBottle2.colorElems[selectedBottle2.colorElems.length - 1]
+					).attr("color");
+					if (
+						currentColor === currentColor2 ||
+						currentColor === undefined ||
+						currentColor2 === undefined
+					) {
 						let color = this.selectedBottle.pourOut();
 						selectedBottle2.pourIn(color);
 						selectedBottle2.showBottle(
@@ -166,3 +186,8 @@ class Game {
 
 game = new Game(new Playground(2, 3));
 bottle = new BaseBottle();
+
+//! TODO
+//ColorElems tömb max elemeinek megadása és a túltöltés megakadályozása
+//Szín randomizálás megjavítása max 4 egy színből összesen
+//Győzelem lekezelése
