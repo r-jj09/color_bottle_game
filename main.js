@@ -4,6 +4,8 @@ class BaseBottle {
 	colorElems = [];
 	id;
 
+	//A színeket és a ranomziálást még át kell gondolni, mert ez így nem lesz jó
+
 	constructor() {
 		let colors = [];
 		for (let i = 0; i < this.numerOfColors; i++) {
@@ -38,15 +40,17 @@ class BaseBottle {
 
 	pourIn(lastColors) {
 		for (let i = 0; i < lastColors.length; i++) {
-			if (this.colorElems.length <= 4) {
+			if (this.colorElems.length < 4) {
 				this.colorElems.push(lastColors[i]);
 			} else {
 				alert("The bottle is already full!");
+				//Kivett elemek visszarakása az eredeti tömbbe
 			}
 		}
 	}
 
 	showBottle(field) {
+		console.log(field);
 		this.colorElems.map((colorElem) => {
 			field.append(colorElem);
 		});
@@ -67,7 +71,6 @@ class Playground {
 	}
 
 	showPlayground() {
-		let lastFieldId;
 		for (let i = 0; i < this.rowsCount; i++) {
 			for (let j = 0; j < this.colsCount; j++) {
 				let id = i * this.colsCount + j;
@@ -75,14 +78,8 @@ class Playground {
 				clone.attr("id", id);
 				this.content.append(clone);
 				this.container.append(this.content);
-				lastFieldId = id;
 			}
 		}
-		let id = lastFieldId + 1;
-		let clone = this.field.clone();
-		clone.attr("id", id);
-		this.content.append(clone);
-		this.container.append(this.content);
 		let fields = $("body").find(".field");
 		fields.map((index, field) => {
 			let bottle = new BaseBottle();
@@ -154,6 +151,8 @@ class Game {
 					currentColor2 = $(
 						selectedBottle2.colorElems[selectedBottle2.colorElems.length - 1]
 					).attr("color");
+					// console.log(currentColor);
+					// console.log(currentColor2);
 					if (
 						currentColor === currentColor2 ||
 						currentColor === undefined ||
@@ -180,7 +179,10 @@ class Game {
 		});
 	}
 	startGame() {
-		console.log();
+		//Győzelem ellenőrzése
+		//Minden field minden ColorElems tömb eleminek color attribútum ellenőrzése és összehasonlítádsa
+		//Ha 1 field minden colorja egyanaz akkor azt befejezettnek jelölni
+		//Ha mind a 7 befejezett akkor win
 	}
 }
 
@@ -189,5 +191,6 @@ bottle = new BaseBottle();
 
 //! TODO
 //ColorElems tömb max elemeinek megadása és a túltöltés megakadályozása
+//Utolsó üveg kiürítése generálást követően
 //Szín randomizálás megjavítása max 4 egy színből összesen
 //Győzelem lekezelése
