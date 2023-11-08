@@ -10,7 +10,7 @@ h1 {
 }
 
 .content {
-    margin: 5em !important;
+    margin: 5em 2em 2em 2em !important;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -53,6 +53,11 @@ h1 {
     position: relative;
 }
 
+.win {
+    border-color: green;
+    animation: wave 1s;
+}
+
 .bottle,
 .field {
     transition: all 0.3s ease-out;
@@ -74,6 +79,15 @@ h1 {
 
 .selected {
     transform: translateY(-2.1rem);
+}
+
+.won {
+    text-align: center;
+}
+
+.won h3 {
+    color: green;
+    font-weight: 600;
 }
 
 .restart-button {
@@ -111,5 +125,18 @@ h1 {
     60%,
     80% {
         transform: translateX(5px);
+    }
+}
+
+@keyframes wave {
+
+    0%,
+    50% {
+        transform: translateY(10px);
+    }
+
+    50%,
+    100% {
+        transform: translateY(0);
     }
 }

@@ -4,8 +4,6 @@ class BaseBottle {
 	colorElems = [];
 	id;
 
-	//A színeket és a ranomziálást még át kell gondolni, mert ez így nem lesz jó
-
 	constructor() {
 		let colors = [];
 		for (let i = 0; i < this.numerOfColors; i++) {
@@ -38,22 +36,27 @@ class BaseBottle {
 		return lastColors;
 	}
 
-	pourIn(lastColors) {
+	pourIn(lastColors, lastBottle) {
 		for (let i = 0; i < lastColors.length; i++) {
 			if (this.colorElems.length < 4) {
 				this.colorElems.push(lastColors[i]);
 			} else {
 				alert("The bottle is already full!");
-				//Kivett elemek visszarakása az eredeti tömbbe
+				lastBottle.push(lastColors[i]);
 			}
 		}
 	}
 
 	showBottle(field) {
-		console.log(field);
 		this.colorElems.map((colorElem) => {
 			field.append(colorElem);
 		});
+	}
+	showEmptyBottle(field) {
+		for (let i = 0; i < 3; i++) {
+			this.colorElems.pop();
+		}
+		field.append(this.colorElems);
 	}
 }
 class Playground {
@@ -86,7 +89,11 @@ class Playground {
 			let id = $(field).attr("id");
 			bottle.id = id;
 			this.bottles[id] = bottle;
-			bottle.showBottle(field);
+			if (bottle.id == 5) {
+				bottle.showEmptyBottle(field);
+			} else {
+				bottle.showBottle(field);
+			}
 		});
 	}
 }
@@ -99,7 +106,6 @@ class Game {
 
 	constructor(playground) {
 		this.playground = playground;
-		this.startGame();
 
 		var currentColor;
 		var currentColor2;
@@ -151,15 +157,14 @@ class Game {
 					currentColor2 = $(
 						selectedBottle2.colorElems[selectedBottle2.colorElems.length - 1]
 					).attr("color");
-					// console.log(currentColor);
-					// console.log(currentColor2);
 					if (
 						currentColor === currentColor2 ||
 						currentColor === undefined ||
 						currentColor2 === undefined
 					) {
+						let lastBottle = this.selectedBottle.colorElems;
 						let color = this.selectedBottle.pourOut();
-						selectedBottle2.pourIn(color);
+						selectedBottle2.pourIn(color, lastBottle);
 						selectedBottle2.showBottle(
 							$("body").find("[id=" + selectedBottle2.id + "]")
 						);
@@ -178,19 +183,23 @@ class Game {
 			}
 		});
 	}
-	startGame() {
+	winGame() {
 		//Győzelem ellenőrzése
-		//Minden field minden ColorElems tömb eleminek color attribútum ellenőrzése és összehasonlítádsa
-		//Ha 1 field minden colorja egyanaz akkor azt befejezettnek jelölni
-		//Ha mind a 7 befejezett akkor win
+		//Végigmapelni az összes field, box elemének color attributumát
+		//Egy boolba eltárolni ha mind a 4nek azonos az attributuma
+		//Ha minden bool true akkor győzött a játékos
+
+		this.playground.bottles.map(() => {
+			// console.log(this.playground.bottles);
+		});
 	}
 }
 
 game = new Game(new Playground(2, 3));
 bottle = new BaseBottle();
 
+game.winGame();
+
 //! TODO
-//ColorElems tömb max elemeinek megadása és a túltöltés megakadályozása
-//Utolsó üveg kiürítése generálást követően
-//Szín randomizálás megjavítása max 4 egy színből összesen
+//Szín randomizálás megjavítása mert vannak esetek mikor 1 színből sokkal többet generál vagy nem eleget :/
 //Győzelem lekezelése
