@@ -24,6 +24,7 @@ class BaseBottle {
 		var lastColor = this.colorElems.pop();
 		lastColors.push(lastColor);
 		var colorAttr = $(lastColor).attr("color");
+
 		this.colorElems.map(() => {
 			if (
 				this.colorElems[this.colorElems.length - 1].getAttribute("color") ===
@@ -168,6 +169,7 @@ class Game {
 						selectedBottle2.showBottle(
 							$("body").find("[id=" + selectedBottle2.id + "]")
 						);
+						// this.winGame();
 					} else {
 						this.selectedField.addClass("shake");
 						this.selected2ndField.addClass("shake");
@@ -184,13 +186,20 @@ class Game {
 		});
 	}
 	winGame() {
-		//Győzelem ellenőrzése
-		//Végigmapelni az összes field, box elemének color attributumát
-		//Egy boolba eltárolni ha mind a 4nek azonos az attributuma
-		//Ha minden bool true akkor győzött a játékos
-
-		this.playground.bottles.map(() => {
-			// console.log(this.playground.bottles);
+		var allColors = [];
+		this.playground.bottles.map((bottle, i) => {
+			let colors = [];
+			bottle.colorElems.map((colorElem, j) => {
+				let color = colorElem.getAttribute("color");
+				colors.push(color);
+				allColors.push(colors);
+				if (
+					colors.length === 4 &&
+					colors.every((val, i, arr) => val === arr[0])
+				) {
+					console.log("wut");
+				}
+			});
 		});
 	}
 }
@@ -198,8 +207,12 @@ class Game {
 game = new Game(new Playground(2, 3));
 bottle = new BaseBottle();
 
-game.winGame();
-
 //! TODO
 //Szín randomizálás megjavítása mert vannak esetek mikor 1 színből sokkal többet generál vagy nem eleget :/
+//* 6 üveg
+//* Abba 4 fér
+//* Kezdésnél 5 lesz megtölve 3 színnel
+//* 15 szín összesen
+//* 6 szín lehetőség
+
 //Győzelem lekezelése
