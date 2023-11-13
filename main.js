@@ -1,6 +1,6 @@
 class BaseBottle {
 	numerOfColors = 3;
-	baseColors = ["aqua", "teal", "navy", "purple", "maroon", "hotpink"];
+	baseColors = ["aqua", "teal", "navy", "purple"];
 	colorElems = [];
 	id;
 
@@ -25,15 +25,13 @@ class BaseBottle {
 		lastColors.push(lastColor);
 		var colorAttr = $(lastColor).attr("color");
 
-		this.colorElems.map(() => {
-			if (
-				this.colorElems[this.colorElems.length - 1].getAttribute("color") ===
-				colorAttr
-			) {
-				lastColor = this.colorElems.pop();
-				lastColors.push(lastColor);
-			}
-		});
+		while (
+			this.colorElems.length > 0 &&
+			$(this.colorElems[this.colorElems.length - 1]).attr("color") === colorAttr
+		) {
+			lastColor = this.colorElems.pop();
+			lastColors.push(lastColor);
+		}
 		return lastColors;
 	}
 
@@ -54,7 +52,7 @@ class BaseBottle {
 		});
 	}
 	showEmptyBottle(field) {
-		for (let i = 0; i < 3; i++) {
+		for (let i = 0; i < 4; i++) {
 			this.colorElems.pop();
 		}
 		field.append(this.colorElems);
@@ -169,7 +167,7 @@ class Game {
 						selectedBottle2.showBottle(
 							$("body").find("[id=" + selectedBottle2.id + "]")
 						);
-						// this.winGame();
+						this.winGame();
 					} else {
 						this.selectedField.addClass("shake");
 						this.selected2ndField.addClass("shake");
@@ -186,21 +184,29 @@ class Game {
 		});
 	}
 	winGame() {
-		var allColors = [];
+		var fullBottles = [];
 		this.playground.bottles.map((bottle, i) => {
 			let colors = [];
 			bottle.colorElems.map((colorElem, j) => {
 				let color = colorElem.getAttribute("color");
 				colors.push(color);
-				allColors.push(colors);
 				if (
 					colors.length === 4 &&
 					colors.every((val, i, arr) => val === arr[0])
 				) {
-					console.log("wut");
+					fullBottles.push(bottle);
 				}
 			});
 		});
+		if (fullBottles.length === 6) {
+			let id = $(".field").attr("id");
+			$(".won").css("display", "flex");
+
+			$(".field").each(function (index) {
+				$(".field").addClass("win");
+				$(this).css("animation-delay", index * 0.2 + "s");
+			});
+		}
 	}
 }
 
@@ -208,11 +214,4 @@ game = new Game(new Playground(2, 3));
 bottle = new BaseBottle();
 
 //! TODO
-//Szín randomizálás megjavítása mert vannak esetek mikor 1 színből sokkal többet generál vagy nem eleget :/
-//* 6 üveg
-//* Abba 4 fér
-//* Kezdésnél 5 lesz megtölve 3 színnel
-//* 15 szín összesen
-//* 6 szín lehetőség
-
-//Győzelem lekezelése
+//Szín randomizálás megjavítása mert vannak esetek mikor 1 színből többet generál vagy nem eleget

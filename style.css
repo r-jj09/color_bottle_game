@@ -10,7 +10,7 @@ h1 {
 }
 
 .content {
-    margin: 5em 2em 2em 2em !important;
+    margin: 5em 2em 1em 2em !important;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -54,8 +54,13 @@ h1 {
 }
 
 .win {
-    border-color: green;
-    animation: wave 1s;
+    border-color: rgb(2, 49, 2);
+    animation: wave 2.5s linear infinite;
+    box-shadow: none;
+}
+
+.win:hover {
+    box-shadow: none;
 }
 
 .bottle,
@@ -82,16 +87,15 @@ h1 {
 }
 
 .won {
-    text-align: center;
-}
-
-.won h3 {
+    display: none;
     color: green;
+    justify-content: center;
     font-weight: 600;
 }
 
 .restart-button {
     text-align: center;
+    margin: 2em;
 }
 
 @media (max-width: 1000px) {
@@ -131,12 +135,11 @@ h1 {
 @keyframes wave {
 
     0%,
-    50% {
-        transform: translateY(10px);
-    }
-
-    50%,
     100% {
         transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-25px);
     }
 }
