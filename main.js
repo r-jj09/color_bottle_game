@@ -198,7 +198,7 @@ class Game {
 				}
 			});
 		});
-		if (fullBottles.length === 6) {
+		if (fullBottles.length === 1) {
 			let id = $(".field").attr("id");
 			$(".won").css("display", "flex");
 
